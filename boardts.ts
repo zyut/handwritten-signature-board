@@ -63,7 +63,6 @@ class Board {
         elWH = this.calcEl(e);
         this.config.width = elWH.width;
         this.config.height = elWH.height;
-        console.log('this.canvasEl', this.canvasEl.clientTop, this.canvasEl.offsetTop)
         this.ctx = this.canvasEl.getContext('2d');
         this.drawLines();
     }
@@ -71,6 +70,7 @@ class Board {
     private drawLines(): void {
         this.ctx.lineWidth = this.config.weight ? this.config.weight : 1;
         this.ctx.strokeStyle = this.config.color ? this.config.color : '#000000';
+        /** pc 端鼠标监听 */
         this.canvasEl.onmousedown = (downE) => {
             let line = {points: [], color: this.config.color, weight: this.config.weight};
             const point: Point = {x: downE.offsetX, y: downE.offsetY};
@@ -90,6 +90,7 @@ class Board {
                 document.onmouseup = null;
             }
         };
+        /** 手机端 touch 事件监听 */
         this.canvasEl.ontouchstart = (startE) => {
             let line = {points: [], color: this.config.color, weight: this.config.weight};
             const point: Point = {x: startE.touches[0].clientX - this.canvasEl.offsetLeft - this.boardBox.borderLeft,
@@ -162,11 +163,11 @@ class Board {
     destroy(): void {
         window.removeEventListener('resize', this.calcScale)
     }
-
+    /** 将手写板以 base64 导出 */
     saveBase64(type = 'image/png', encoderOptions) {
         return this.canvasEl.toDataURL(type, encoderOptions)
     }
-
+    /** 将手写板以 bold 格式导出 */
     saveBold(type = 'image/png', encoderOptions) {
         let base64 = this.canvasEl.toDataURL(type, encoderOptions);
         let binary = atob(base64.split(',')[1]);
@@ -185,7 +186,7 @@ class Board {
         this.drawLinesByData();
     }
 
-    setOption(weight, color, e) {
+    setOption(weight, color) {
         this.config.weight = weight;
         this.config.color = color;
         this.drawLines();
@@ -216,7 +217,7 @@ interface Point {
 interface Line extends BoardAttr {
     points: Point[]
 }
-
+/** 节流 */
 function throttle(fn, await): EventListenerOrEventListenerObject {
     let timeout: number = null;
     return function () {

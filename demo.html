@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>手写板</title>
+    <title>手写板demo</title>
     <script src="boardts.js"></script>
 </head>
 <body>
 <div class="pad-container">
-    <div>2132213</div>
-    <span>tyyuyiuyiu</span>
 </div>
 </body>
 <style>
@@ -16,11 +14,22 @@
         position: relative;
         box-sizing: border-box;
         border: 12px solid #eee;
-        height: 300px;
+        height: 100vh;
         padding: 30px;
+    }
+    *{
+        margin: 0;
+        padding: 0;
     }
 </style>
 <script>
+  /**
+   * 清除手写板 board.clear()
+   * 销毁 resize监听 board.destroy()
+   * 以 base64 方式保存手写板 board.saveBase64(type, encoderOptions)
+   * 以 bold 格式保存手写板 board.saveBold(type, encoderOptions)
+   * 设置画布笔触大小，颜色 board.setOption(weight, color)
+   */
     let div = document.getElementsByClassName('pad-container')[0];
     let board = new Board(div);
 
